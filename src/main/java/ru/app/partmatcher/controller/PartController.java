@@ -40,6 +40,12 @@ public class PartController {
                 .toList());
     }
 
+    @Operation(summary = "Получить информацию о детали по id")
+    @GetMapping("/{id}")
+    public ResponseEntity<PartDto> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(partService.getById(id));
+    }
+
     @Operation(summary = "Получить детали совместимые с автомобилем по VIN")
     @GetMapping("/vehicle/{vin}")
     public ResponseEntity<List<PartDto>> partsForVehicle(@PathVariable String vin) {

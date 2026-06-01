@@ -24,6 +24,7 @@ public class VehicleService {
     private final VehicleRepository vehicleRepository;
     private final SearchHistoryService searchHistoryService;
 
+    @Transactional
     public VehicleSearchResultDto searchByVin(String vin) {
         Vehicle vehicle = vehicleRepository.findByVinIgnoreCase(vin)
                 .orElseThrow(() -> new ResourceNotFoundException("Автомобиль с VIN не найден"));
@@ -38,6 +39,7 @@ public class VehicleService {
                 .build();
     }
 
+    @Transactional
     public List<PartDto> getPartsByVin(String vin) {
         Vehicle vehicle = vehicleRepository.findByVinIgnoreCase(vin)
                 .orElseThrow(() -> new ResourceNotFoundException("Автомобиль с VIN не найден"));

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.app.partmatcher.dto.PartDto;
 import ru.app.partmatcher.dto.SearchHistoryDto;
 import ru.app.partmatcher.dto.UserDto;
@@ -46,12 +47,14 @@ public class UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("Пользователь не найден"));
     }
 
+    @Transactional
     public List<PartDto> getFavoriteParts() {
         return getCurrentUserEntity().getFavoriteParts().stream()
                 .map(PartMapper::toDto)
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public void addFavoritePart(Long partId) {
         User user = getCurrentUserEntity();
         Part part = partRepository.findById(partId)
@@ -60,6 +63,7 @@ public class UserService {
         userRepository.save(user);
     }
 
+    @Transactional
     public void removeFavoritePart(Long partId) {
         User user = getCurrentUserEntity();
         boolean removed = user.getFavoriteParts().removeIf(part -> part.getId().equals(partId));

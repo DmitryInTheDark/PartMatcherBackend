@@ -43,6 +43,12 @@ public class PartService {
         return PartMapper.toDto(partRepository.save(part));
     }
 
+    public PartDto getById(Long id) {
+        Part part = partRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Деталь не найдена"));
+        return PartMapper.toDto(part);
+    }
+
     public void delete(Long id) {
         if (!partRepository.existsById(id)) {
             throw new ResourceNotFoundException("Деталь не найдена");
@@ -56,19 +62,15 @@ public class PartService {
         }
         userService.addSearchQuery(query);
 
-        List<String> tokens = Arrays.stream(normalize(query).split("\\s+"))
-                .filter(token -> !token.isBlank())
-                .distinct()
-                .toList();
-        if (tokens.isEmpty()) {
-            return List.of();
-        }
+        List<Part> parts = partRepository.findByNameIgnoreCaseContainingOrArticleIgnoreCaseContainingOrCategoryIgnoreCaseContainingOrManufacturerIgnoreCaseContainingOrDescriptionIgnoreCaseContaining(
+                query,
+                query,
+                query,
+                query,
+                query
+        );
 
-        return partRepository.findAll().stream()
-                .map(part -> new PartScore(part, calculateRelevance(part, tokens)))
-                .filter(score -> score.getScore() > 0)
-                .sorted(Comparator.comparingDouble(PartScore::getScore).reversed())
-                .map(PartScore::getPart)
+        return parts.stream()
                 .map(PartMapper::toDto)
                 .collect(Collectors.toList());
     }

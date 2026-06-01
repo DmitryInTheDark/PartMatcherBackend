@@ -3,10 +3,12 @@ package ru.app.partmatcher.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.app.partmatcher.dto.ChatMessageDto;
+import ru.app.partmatcher.dto.UserDto;
 import ru.app.partmatcher.entity.SupportChatMessage;
 import ru.app.partmatcher.entity.User;
 import ru.app.partmatcher.exception.ResourceNotFoundException;
 import ru.app.partmatcher.mapper.ChatMessageMapper;
+import ru.app.partmatcher.mapper.UserMapper;
 import ru.app.partmatcher.repository.SupportChatMessageRepository;
 import ru.app.partmatcher.repository.UserRepository;
 
@@ -42,4 +44,10 @@ public class ChatService {
                 .map(ChatMessageMapper::toDto)
                 .collect(Collectors.toList());
     }
+
+        public List<UserDto> getChatContacts(Long userId) {
+                return repository.findChatContacts(userId).stream()
+                                .map(UserMapper::toDto)
+                                .collect(Collectors.toList());
+        }
 }

@@ -17,11 +17,11 @@ import ru.app.partmatcher.service.UserService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/support/chat")
+@RequestMapping("/api/chat")
 @RequiredArgsConstructor
 @PreAuthorize("hasAnyRole('SUPPORT','ADMIN','USER')")
-@Tag(name = "Support", description = "Чат поддержки")
-public class SupportChatController {
+@Tag(name = "Chat", description = "Chat API alias for support chat")
+public class ChatController {
 
     private final ChatService chatService;
     private final UserService userService;
